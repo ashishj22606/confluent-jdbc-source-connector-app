@@ -1,0 +1,28 @@
+version: '3'
+services:
+  kafka-connect:
+    image: your-docker-image-name:latest  # Replace with the actual image name
+    container_name: kafka-connect
+    ports:
+      - "8083:8083"
+    environment:
+      - CONNECT_BOOTSTRAP_SERVERS=broker:9092
+      - CONNECT_REST_PORT=8083
+      - CONNECT_GROUP_ID=connect-cluster
+      - CONNECT_CONFIG_STORAGE_TOPIC=connect-configs
+      - CONNECT_OFFSET_STORAGE_TOPIC=connect-offsets
+      - CONNECT_STATUS_STORAGE_TOPIC=connect-status
+      - CONNECT_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+      - CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE=false
+      - CONNECT_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+      - CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE=false
+      - CONNECT_INTERNAL_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+      - CONNECT_INTERNAL_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+      - CONNECT_REST_ADVERTISED_HOST_NAME=kafka-connect  # Change as needed
+      - CONNECT_REST_ADVERTISED_PORT=8083
+      - CONNECT_SNOWFLAKE_USERNAME=${{ secrets.SNOWFLAKE_USERNAME }}
+      - CONNECT_SNOWFLAKE_PASSWORD=${{ secrets.SNOWFLAKE_PASSWORD }}
+      - CONNECT_OTHER_SECRETS=${{ secrets.YOUR_SECRET }}
+    volumes:
+      - /path/to/your/connectors/directory:/connectors  # Mount your connectors directory
+    command: ["connect-standalone", "/etc/schema-registry/connect-avro-standalone.properties", "/connectors/your-connector-config.properties"]

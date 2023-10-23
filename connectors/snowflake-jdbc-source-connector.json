@@ -1,0 +1,22 @@
+{
+    "name": "snowflake-source-connector",
+    "config": {
+      "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+      "tasks.max": "1",
+      "connection.url": "${SFC_CONNECTOR_JDBC_URL}",
+      "connection.user": "${SFC_CONNECTOR_JDBC_USER}",
+      "connection.password": "${SFC_CONNECTOR_JDBC_PASSWORD}",
+      "mode": "timestamp",
+      "timestamp.column.name": "created_at",
+      "validate.non.null": "false",
+      "topic.prefix": "snowflake-data-",
+      "table.whitelist": "your_snowflake_table",
+      "name": "snowflake-source-connector",
+      "value.converter": "io.confluent.connect.avro.AvroConverter",
+      "value.converter.schema.registry.url": "${SFC_CONNECTOR_SCHEMA_REGISTRY}",
+      "transforms": "unwrap",
+      "transforms.unwrap.type": "io.debezium.transforms.UnwrapFromEnvelope",
+      "transforms.unwrap.add.source.fields": "true"
+    }
+  }
+  
