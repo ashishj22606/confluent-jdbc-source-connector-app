@@ -38,6 +38,8 @@ kafka-connect-jdbc-snowflake/
 │ ├── snowflake-credentials.json
 │ ├── kafka-credentials.json
 ```
+## Diagram
+![Diagram](https://github.com/ashishj22606/confluent-jdbc-source-connector-app/raw/main/diagram.png)
 
 
 ## Usage
