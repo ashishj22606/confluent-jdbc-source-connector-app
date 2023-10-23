@@ -23,6 +23,7 @@ services:
       - CONNECT_SNOWFLAKE_USERNAME=${{ secrets.SNOWFLAKE_USERNAME }}
       - CONNECT_SNOWFLAKE_PASSWORD=${{ secrets.SNOWFLAKE_PASSWORD }}
       - CONNECT_OTHER_SECRETS=${{ secrets.YOUR_SECRET }}
+      - SFK_P8_FILE= ${{ secrets.SFK_P8_FILE }}
     volumes:
       - /path/to/your/connectors/directory:/connectors  # Mount your connectors directory
     command: ["connect-standalone", "/etc/schema-registry/connect-avro-standalone.properties", "/connectors/your-connector-config.properties"]

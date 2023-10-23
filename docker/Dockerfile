@@ -9,3 +9,8 @@ ENV CLASSPATH="/usr/share/java/kafka-connect-jdbc/snowflake-jdbc-driver.jar:${CL
 
 # Copy the connector JAR to the /usr/share/confluent-hub-components directory
 ADD connectors/snowflake-jdbc-source-connector.json /usr/share/confluent-hub-components/snowflake-jdbc-source-connector.json
+
+ARG SFK_P8_FILE
+
+# Copy the sfk.p8 file to the image
+COPY $SFK_P8_FILE /path/to/sfk.p8
