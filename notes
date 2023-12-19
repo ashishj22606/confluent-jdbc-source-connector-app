@@ -1,0 +1,33 @@
+# Stage 1: Build JAR
+FROM maven:3.8.4-openjdk-17 AS builder
+WORKDIR /app
+COPY src /app/src
+COPY pom.xml /app
+RUN mvn clean package
+
+# Stage 2: Create final image with Java 17, OpenSSL 3.0.2, and Kafka Connect
+FROM adoptopenjdk:17-jdk-hotspot-focal AS runtime
+WORKDIR /app
+
+# Install OpenSSL
+RUN apt-get update && \
+    apt-get install -y openssl=1.1.1d-0+deb10u7
+
+# Copy JAR from the build stage
+COPY --from=builder /app/target/your-app.jar /app/your-app.jar
+
+# Download and install Confluent Platform
+# (Note: Adjust the URL and version as needed)
+RUN wget -qO - https://packages.confluent.io/deb/7.0/archive.key | apt-key add - && \
+    add-apt-repository "deb [arch=amd64] https://packages.confluent.io/deb/7.0 stable main" && \
+    apt-get update && \
+    apt-get install -y confluent-platform-oss-2.13
+
+# Copy Kafka Connect configuration file
+COPY connect-distributed.properties /etc/kafka/connect-distributed.properties
+
+# Entrypoint script to evaluate secrets and start Kafka Connect
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+ENTRYPOINT ["/app/entrypoint.sh"]
